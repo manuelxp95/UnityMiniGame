@@ -10,6 +10,7 @@ public class ScoreManager : MonoBehaviour
     public static int HighScore { get; private set; }
 
     public TextMeshProUGUI scoreText;
+    AudioManager audioManager;
 
 
 
@@ -19,15 +20,14 @@ public class ScoreManager : MonoBehaviour
         LevelScore = 0;
         EventManager.Instance.Subscribe("AsteroidDestroyed", UpdateScore);
         EventManager.Instance.Subscribe("BigAsteroidDestroyed", BigUpdateScore);
-        // Cargar HighScore desde PlayerPrefs
+        audioManager=GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
     }
 
     private void UpdateScoreText()
     {
-        // Asegurarse de tener una referencia válida al objeto de texto
         if (scoreText != null)
         {
-            // Actualizar el texto con el nuevo puntaje
+            audioManager.PlaySFX(audioManager.highScore);
             scoreText.text = "HighScore: " + HighScore.ToString();
         }
         else

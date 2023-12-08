@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Implementación de la clase que implementa la interfaz
 public class PlayerController : MonoBehaviour, IDamageable, IShootable
 {
     
@@ -16,6 +15,7 @@ public class PlayerController : MonoBehaviour, IDamageable, IShootable
     public static PlayerController Instance;
     private EventManager eventManager;
     private bool canMove = true;
+    AudioManager audioManager;
 
 
     void Awake()
@@ -26,8 +26,11 @@ public class PlayerController : MonoBehaviour, IDamageable, IShootable
     void Start()
     {
         eventManager = GameManager.Instance.GetComponent<EventManager>();
+        EventManager.Instance.Subscribe("RetryGame", ResetPlayer);
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+
     }
-    
+
     private void Update()
     {
         if (canMove && !PauseMenu.isPaused)
@@ -35,15 +38,12 @@ public class PlayerController : MonoBehaviour, IDamageable, IShootable
             float horizontalInput = Input.GetAxis("Horizontal");
             float verticalInput = Input.GetAxis("Vertical");
 
-            // Calcular el desplazamiento y la rotación
             float translation = verticalInput * speed * Time.deltaTime;
             float rotation = -horizontalInput * rotationSpeed * Time.deltaTime;
 
-            // Mover y rotar la nave
             transform.Translate(0, translation, 0);
             transform.Rotate(0, 0, rotation);
 
-            // Limitar la velocidad de rotación
             float currentRotation = transform.localEulerAngles.z;
             transform.localEulerAngles = new Vector3(0, 0, currentRotation);
         }
@@ -61,30 +61,33 @@ public class PlayerController : MonoBehaviour, IDamageable, IShootable
     public void Shoot()
     {
         Instantiate(projectilePrefab, shotSpawn.position, transform.rotation);
+        audioManager.PlaySFX(audioManager.shoot);
+
     }
 
-    // Método de la interfaz implementado
     public void TakeDamage(int damage)
     {
         health -= damage;
 
-        // Lógica adicional para el manejo de la salud, por ejemplo, verificar si el jugador ha muerto.
         if (health <= 0)
         {
             Die();
         }
     }
 
-    // Método adicional de la clase
     private void Die()
     {
         Debug.Log("Player has died.");
         canMove = false;
-        Time.timeScale = 0f;
+        
         eventManager.TriggerEvent("PlayerDie");
 
-        // Lógica adicional para el manejo de la muerte del jugador.
     }
 
+    public void ResetPlayer()
+    {
+        health = 100;
+        canMove = true;
+    }
 
 }
