@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour, IDamageable, IShootable
     
     private void Update()
     {
-        if (canMove)
+        if (canMove && !PauseMenu.isPaused)
         {
             float horizontalInput = Input.GetAxis("Horizontal");
             float verticalInput = Input.GetAxis("Vertical");
