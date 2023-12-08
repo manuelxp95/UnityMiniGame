@@ -9,13 +9,17 @@ public class AsteroidController : MonoBehaviour, IDamageable
     public int score;
     public int health;
     public float speed;
+    public int damage = 30;
 
     private EventManager eventManager;
     private Vector3 directionToPlayer;
+    private int scoreValue;
+    
 
     private void Start()
     {
         eventManager = GameManager.Instance.GetComponent<EventManager>();
+
         // Mover hacia el jugador
         directionToPlayer = (PlayerController.Instance.transform.position - transform.position).normalized;
     }
@@ -28,25 +32,41 @@ public class AsteroidController : MonoBehaviour, IDamageable
 
     public void Initialize(float asteroidSpeed, float asteroidSize)
     {
-        speed = asteroidSpeed;
+        speed = asteroidSpeed/(asteroidSize*(.85f));
 
         // Escalar el asteroide según el tamaño
         transform.localScale = new Vector3(asteroidSize, asteroidSize, asteroidSize);
+        health = Mathf.RoundToInt(asteroidSize) * 2;
+        scoreValue = Mathf.RoundToInt(asteroidSize) * 10;
     }
 
     public void TakeDamage(int damage)
     {
-
+        Debug.Log(eventManager);
         health -= damage;
         if (health <= 0)
         {
+            gameObject.GetComponent<CircleCollider2D>().enabled = false;
+
+            eventManager.TriggerEvent("AsteroidDestroyed");
             Destroy(gameObject);
             // Actualizar puntaje y sonido de destrucción
-            ScoreManager.UpdateScore(score);
+            //Sonido
+        }
+    }
 
-            // Notificar a los suscriptores que un asteroide fue destruido
-            eventManager.TriggerEvent("AsteroidDestroyed");
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        // Verificar si la colisión es con un asteroide
+        if (other.gameObject.CompareTag("Player"))
+        {
+            IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
 
+            if (damageable != null)
+            {
+                damageable.TakeDamage(damage); // Enviar la señal TakeDamage al asteroide
+                Destroy(gameObject); // Destruir el proyectil después de causar daño
+            }
         }
     }
 }

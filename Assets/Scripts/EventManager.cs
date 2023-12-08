@@ -5,7 +5,23 @@ using UnityEngine;
 
 public class EventManager : MonoBehaviour
 {
+
+    public static EventManager Instance;
+
     private Dictionary<string, Action> eventListeners = new Dictionary<string, Action>();
+
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     public void Subscribe(string eventName, Action listener)
     {

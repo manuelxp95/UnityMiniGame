@@ -14,12 +14,18 @@ public class PlayerController : MonoBehaviour, IDamageable, IShootable
     public int health = 100;
 
     public static PlayerController Instance;
+    private EventManager eventManager;
 
     void Awake()
     {
         Instance = this;
     }
 
+    void Start()
+    {
+        eventManager = GameManager.Instance.GetComponent<EventManager>();
+    }
+    
     private void Update()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -65,6 +71,8 @@ public class PlayerController : MonoBehaviour, IDamageable, IShootable
     private void Die()
     {
         Debug.Log("Player has died.");
+        eventManager.TriggerEvent("PlayerDie");
+
         // Lógica adicional para el manejo de la muerte del jugador.
     }
 
