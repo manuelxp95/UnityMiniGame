@@ -20,24 +20,19 @@ public class AsteroidSpawner : MonoBehaviour
     {
         while (true)
         {
-            // Obtener la posición del jugador
             Vector3 playerPosition = PlayerController.Instance.transform.position;
 
-            // Calcular una posición aleatoria alrededor del jugador
             Vector2 randomDirection = Random.insideUnitCircle.normalized;
             Vector3 spawnPosition = playerPosition + new Vector3(randomDirection.x, randomDirection.y, 0f ) * spawnRadius;
 
-            // Instanciar el asteroide en la posición calculada
             GameObject asteroid = Instantiate(asteroidPrefab, spawnPosition, Quaternion.identity);
             AsteroidController asteroidController = asteroid.GetComponent<AsteroidController>();
 
-            // Configurar tamaño y velocidad del asteroide (ajusta estos valores según sea necesario)
             float asteroidSize = Random.Range(1f, 3f);
             float asteroidSpeed = Random.Range(2f, 5f);
 
             asteroidController.Initialize(asteroidSpeed, asteroidSize);
 
-            // Calcular un nuevo tiempo de espera antes de instanciar el siguiente asteroide
             float spawnDelay = Random.Range(minSpawnDelay, maxSpawnDelay);
             yield return new WaitForSeconds(spawnDelay);
         }

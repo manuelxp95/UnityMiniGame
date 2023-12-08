@@ -32,5 +32,4 @@ public class GameManager : MonoBehaviour
     }
 
 
-    // Otros métodos y propiedades del juego
 }
