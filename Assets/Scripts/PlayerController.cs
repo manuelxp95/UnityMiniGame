@@ -67,7 +67,6 @@ public class PlayerController : MonoBehaviour, IDamageable, IShootable
     public void TakeDamage(int damage)
     {
         health -= damage;
-        Debug.Log($"Player took {damage} damage. Remaining health: {health}");
 
         // Lógica adicional para el manejo de la salud, por ejemplo, verificar si el jugador ha muerto.
         if (health <= 0)
@@ -80,6 +79,8 @@ public class PlayerController : MonoBehaviour, IDamageable, IShootable
     private void Die()
     {
         Debug.Log("Player has died.");
+        canMove = false;
+        Time.timeScale = 0f;
         eventManager.TriggerEvent("PlayerDie");
 
         // Lógica adicional para el manejo de la muerte del jugador.
