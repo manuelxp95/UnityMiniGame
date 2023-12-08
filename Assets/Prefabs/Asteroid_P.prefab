@@ -103,6 +103,7 @@ MonoBehaviour:
   score: 20
   health: 3
   speed: 20
+  damage: 30
 --- !u!58 &6837107841042381142
 CircleCollider2D:
   m_ObjectHideFlags: 0

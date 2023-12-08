@@ -18,6 +18,7 @@ public class ScoreManager : MonoBehaviour
         scoreText = GameObject.Find("HighScoreText").GetComponent<TextMeshProUGUI>();
         LevelScore = 0;
         EventManager.Instance.Subscribe("AsteroidDestroyed", UpdateScore);
+        EventManager.Instance.Subscribe("BigAsteroidDestroyed", BigUpdateScore);
         // Cargar HighScore desde PlayerPrefs
     }
 
@@ -37,6 +38,17 @@ public class ScoreManager : MonoBehaviour
     public void UpdateScore()
     {
         LevelScore += 10;
+
+        if (LevelScore > HighScore)
+        {
+            HighScore = LevelScore;
+            UpdateScoreText();
+        }
+    }
+
+    public void BigUpdateScore()
+    {
+        LevelScore += 30;
 
         if (LevelScore > HighScore)
         {

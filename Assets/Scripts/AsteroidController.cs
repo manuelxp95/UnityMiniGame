@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class AsteroidController : MonoBehaviour, IDamageable
 {
-    public int size;
+    public float size;
     public int score;
     public int health;
     public float speed;
@@ -33,6 +33,7 @@ public class AsteroidController : MonoBehaviour, IDamageable
     public void Initialize(float asteroidSpeed, float asteroidSize)
     {
         speed = asteroidSpeed/(asteroidSize*(.85f));
+        size = asteroidSize;
 
         // Escalar el asteroide según el tamaño
         transform.localScale = new Vector3(asteroidSize, asteroidSize, asteroidSize);
@@ -47,8 +48,14 @@ public class AsteroidController : MonoBehaviour, IDamageable
         if (health <= 0)
         {
             gameObject.GetComponent<CircleCollider2D>().enabled = false;
-
-            eventManager.TriggerEvent("AsteroidDestroyed");
+            if (size >= 2f) {
+                eventManager.TriggerEvent("BigAsteroidDestroyed");
+            }
+            else
+            {
+                eventManager.TriggerEvent("AsteroidDestroyed");
+            }
+            
             Destroy(gameObject);
             // Actualizar puntaje y sonido de destrucción
             //Sonido

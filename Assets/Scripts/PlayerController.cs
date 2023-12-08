@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour, IDamageable, IShootable
 
     public static PlayerController Instance;
     private EventManager eventManager;
+    private bool canMove = true;
+
 
     void Awake()
     {
@@ -28,25 +30,32 @@ public class PlayerController : MonoBehaviour, IDamageable, IShootable
     
     private void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        if (canMove)
+        {
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
 
-        // Calcular el desplazamiento y la rotación
-        float translation = verticalInput * speed * Time.deltaTime;
-        float rotation = -horizontalInput * rotationSpeed * Time.deltaTime;
+            // Calcular el desplazamiento y la rotación
+            float translation = verticalInput * speed * Time.deltaTime;
+            float rotation = -horizontalInput * rotationSpeed * Time.deltaTime;
 
-        // Mover y rotar la nave
-        transform.Translate(0, translation, 0);
-        transform.Rotate(0, 0, rotation);
+            // Mover y rotar la nave
+            transform.Translate(0, translation, 0);
+            transform.Rotate(0, 0, rotation);
 
-        // Limitar la velocidad de rotación
-        float currentRotation = transform.localEulerAngles.z;
-        transform.localEulerAngles = new Vector3(0, 0, currentRotation);
+            // Limitar la velocidad de rotación
+            float currentRotation = transform.localEulerAngles.z;
+            transform.localEulerAngles = new Vector3(0, 0, currentRotation);
+        }
 
         if (Input.GetButtonDown("Fire1"))
         {
             Shoot();
         }
+    }
+    public void StopMovement()
+    {
+        canMove = false;
     }
 
     public void Shoot()
