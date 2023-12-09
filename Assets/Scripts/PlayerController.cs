@@ -79,7 +79,9 @@ public class PlayerController : MonoBehaviour, IDamageable, IShootable
     {
         Debug.Log("Player has died.");
         canMove = false;
-        
+
+        audioManager.PlaySFX(audioManager.death);
+
         eventManager.TriggerEvent("PlayerDie");
 
     }

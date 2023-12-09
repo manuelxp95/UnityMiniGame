@@ -3624,6 +3624,7 @@ MonoBehaviour:
   highScore: {fileID: 8300000, guid: 018a7905b0e855544945a16623b0a1a2, type: 3}
   shoot: {fileID: 8300000, guid: 17655fb7cbbe2b845b9236cc284769a3, type: 3}
   destroyAst: {fileID: 8300000, guid: da47574fdabf8bd488593d05c0f0d5c0, type: 3}
+  death: {fileID: 8300000, guid: 3a93857962f881746b3aa36f428c54db, type: 3}
 --- !u!4 &1575051336
 Transform:
   m_ObjectHideFlags: 0

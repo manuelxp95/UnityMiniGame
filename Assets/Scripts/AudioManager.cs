@@ -11,6 +11,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip highScore;
     public AudioClip shoot;
     public AudioClip destroyAst;
+    public AudioClip death;
 
     private void Start()
     {
